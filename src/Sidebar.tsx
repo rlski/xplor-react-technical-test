@@ -2,17 +2,20 @@ import Sheet from "@mui/joy/Sheet";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
 import Chip from "@mui/joy/Chip";
+import Checkbox from "@mui/joy/Checkbox";
+import Typography from "@mui/joy/Typography";
 import useFetch from "./useFetch";
 import type { Issue, IssueUser } from "../types/types";
-import { Dispatch } from "react";
-import { Typography } from "@mui/joy";
+import type { Dispatch } from "react";
 
 type SidebarProps = {
   setSelectedIssue: Dispatch<Issue["number"] | null>;
   issueUsers: IssueUser[];
+  hiddenUsers: IssueUser["login"][];
+  toggleUser: (user: IssueUser["login"]) => void;
 };
 
-export default function Sidebar({ setSelectedIssue, issueUsers }: SidebarProps) {
+export default function Sidebar({ setSelectedIssue, issueUsers, hiddenUsers, toggleUser }: SidebarProps) {
   const issues = useFetch<Issue[]>({ url: "https://api.github.com/repos/facebook/react/issues?per_page=50" });
 
   return (
@@ -49,24 +52,36 @@ export default function Sidebar({ setSelectedIssue, issueUsers }: SidebarProps) 
             Issue users
           </Typography>
           {issueUsers.map((user) => (
-            <Typography
+            <Checkbox
               key={user.login}
-              component="span"
-              endDecorator={
-                <Chip
-                  variant="outlined"
-                  size="sm"
-                  color="neutral"
-                  sx={{
-                    borderRadius: "sm",
-                  }}
+              variant="soft"
+              size="sm"
+              sx={{
+                flexDirection: "row-reverse",
+                alignItems: "center",
+              }}
+              checked={!hiddenUsers.includes(user.login)}
+              onChange={() => toggleUser(user.login)}
+              label={
+                <Typography
+                  component="span"
+                  endDecorator={
+                    <Chip
+                      variant="outlined"
+                      size="sm"
+                      color="neutral"
+                      sx={{
+                        borderRadius: "sm",
+                      }}
+                    >
+                      {user.commentsCount}
+                    </Chip>
+                  }
                 >
-                  {user.commentsCount}
-                </Chip>
+                  {user.login}
+                </Typography>
               }
-            >
-              {user.login}
-            </Typography>
+            />
           ))}
         </>
       )}
