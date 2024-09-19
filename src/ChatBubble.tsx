@@ -35,10 +35,10 @@ export default function ChatBubble({ body, variant, created_at, user }: ChatBubb
               borderTopLeftRadius: 0,
             }}
           >
-            <Markdown>{body}</Markdown>
-            {/* <Typography level="body-sm" color="primary">
-              {body}
-            </Typography> */}
+            <Markdown
+              children={body}
+              components={{ img: ({ node, ...props }) => <img style={{ maxWidth: "100%" }} {...props} /> }}
+            />
           </Sheet>
         </Box>
       </Box>
