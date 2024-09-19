@@ -12,6 +12,7 @@ export type Issue = {
   title: string;
   body: string;
   comments_url: string;
+  events_url: string;
 };
 
 export type Comment = {
@@ -20,6 +21,14 @@ export type Comment = {
   user: User;
 
   body: string;
+};
+
+export type Event = {
+  id: number;
+  created_at: string;
+  actor: User;
+
+  event: string;
 };
 
 export type IssueUser = {

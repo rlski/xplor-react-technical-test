@@ -3,15 +3,15 @@ import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import ChatBubble from "./ChatBubble";
-import type { Issue, Comment, IssueUser } from "../types/types";
+import type { Issue, IssueUser } from "../types/types";
 
 type MessagesPaneProps = {
   issue: Issue;
-  comments?: Comment[];
   hiddenUsers: IssueUser["login"][];
+  timeline: any[];
 };
 
-export default function MessagesPane({ issue, comments, hiddenUsers }: MessagesPaneProps) {
+export default function MessagesPane({ issue, hiddenUsers, timeline }: MessagesPaneProps) {
   return (
     <Sheet
       sx={{
@@ -56,10 +56,25 @@ export default function MessagesPane({ issue, comments, hiddenUsers }: MessagesP
           <Typography level="body-sm">{issue.user.login}</Typography>
         </Stack>
       )}
-      {comments && (
+
+      {timeline && (
         <Stack spacing={2} justifyContent="flex-end" px={2} py={3}>
           <ChatBubble variant="solid" {...issue!} />
-          {comments.map((comment) => {
+
+          {timeline.map((comment) => {
+            if (comment.event) {
+              return (
+                // @TODO Make a component that displays icon and details from the event
+                <ChatBubble
+                  key={comment.id}
+                  variant="outlined"
+                  created_at={comment.created_at}
+                  body={comment.event}
+                  user={comment.actor}
+                />
+              );
+            }
+
             const isHidden = hiddenUsers.includes(comment.user.login);
             if (isHidden) return null;
 

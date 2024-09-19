@@ -4,7 +4,7 @@ import { CssVarsProvider } from "@mui/joy/styles";
 import MessagesPane from "./MessagesPane";
 import Sidebar from "./Sidebar";
 import { useEffect, useMemo, useState } from "react";
-import type { Issue, Comment, IssueUser } from "../types/types";
+import type { Issue, Comment, IssueUser, Event } from "../types/types";
 import useFetch from "./useFetch";
 
 function App() {
@@ -14,6 +14,16 @@ function App() {
     { enabled: selectedIssue !== null },
   );
   const comments = useFetch<Comment[]>({ url: issue.data?.comments_url }, { enabled: issue.isFetched });
+  const events = useFetch<Event[]>({ url: issue.data?.events_url }, { enabled: issue.isFetched });
+
+  // Gets all comments and event is a chronoligal order timeline. We can distinguish events from comments by the `event` key on events.
+  const timeline = useMemo(() => {
+    if (!comments.data || !events.data) return [];
+
+    return [...comments.data, ...events.data].sort(
+      (a, b) => new Date(a.created_at).valueOf() - new Date(b.created_at).valueOf(),
+    );
+  }, [comments, events]);
 
   const [hiddenUsers, setHiddenUsers] = useState<IssueUser["login"][]>([]);
 
@@ -64,7 +74,7 @@ function App() {
         </Box>
         {issue.data && (
           <Box component="main" sx={{ flex: 1 }}>
-            <MessagesPane issue={issue.data} comments={comments?.data} hiddenUsers={hiddenUsers} />
+            <MessagesPane issue={issue.data} timeline={timeline} hiddenUsers={hiddenUsers} />
           </Box>
         )}
       </Box>
