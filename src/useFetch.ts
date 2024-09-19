@@ -2,8 +2,8 @@ import { UndefinedInitialDataInfiniteOptions, useInfiniteQuery } from "@tanstack
 import { parse } from "http-link-header";
 import axios, { AxiosRequestConfig } from "axios";
 
-// Comment next line to use without Github API token
-axios.defaults.headers.common["Authorization"] = `Bearer ${import.meta.env.VITE_GITHUB_ACCESS_TOKEN}`;
+// Uncomment next line to use Github API access token
+// axios.defaults.headers.common["Authorization"] = `Bearer ${import.meta.env.VITE_GITHUB_ACCESS_TOKEN}`;
 
 function useFetch<T>(
   config: AxiosRequestConfig,

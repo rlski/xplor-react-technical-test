@@ -1,8 +1,16 @@
+# Installation
+
+Pour démarrer le projet il suffit de faire `npm i && npm start`
+
+[Cette ligne](https://github.com/rlski/xplor-react-technical-test/blob/main/src/useFetch.ts#L6) ajoute la possibilité d'utiliser un access token Github pour éviter d`être bloqué par les quotas d'appels API publics.
+
+Il faudra alors décommenter cette ligne et créer un `.env.local` qui référence la variable d'environnement `VITE_GITHUB_ACCESS_TOKEN`.
+
+[Plus d'infos sur l'authentification à l'API Github ici](https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2022-11-28)
+
 # Consignes
 
 Vous allez devoir contribuer à un petite application Github. Celle-ci sert à visualiser la discussion autour d'une issue.
-
-Pour démarrer le projet il suffit de faire `npm i && npm start`
 
 Essayez de réaliser un maximum de tâches **en un temps limité à 3 heures**. Il est inutile de chercher à réaliser l'ensemble, on sait qu'il faudrait plus de temps que celui imparti et ce n'est pas le but recherché.
 Lorsqu'on vous aurez terminé, nous attendons recevoir votre code sous forme de lien vers un dépôt Github.
