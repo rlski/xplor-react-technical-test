@@ -1,17 +1,16 @@
-import { Avatar } from "@mui/joy";
+import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
 import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
+import type { User } from "../types/types";
+import Markdown from "react-markdown";
 
 type ChatBubbleProps = {
   body: string;
   variant: "solid" | "outlined";
   created_at: string;
-  user: {
-    login: string;
-    avatar_url: string;
-  };
+  user: User;
 };
 
 export default function ChatBubble({ body, variant, created_at, user }: ChatBubbleProps) {
@@ -36,9 +35,10 @@ export default function ChatBubble({ body, variant, created_at, user }: ChatBubb
               borderTopLeftRadius: 0,
             }}
           >
-            <Typography level="body-sm" color="primary">
+            <Markdown>{body}</Markdown>
+            {/* <Typography level="body-sm" color="primary">
               {body}
-            </Typography>
+            </Typography> */}
           </Sheet>
         </Box>
       </Box>
