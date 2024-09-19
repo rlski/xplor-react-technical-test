@@ -4,15 +4,17 @@ import Option from "@mui/joy/Option";
 import Chip from "@mui/joy/Chip";
 import Checkbox from "@mui/joy/Checkbox";
 import Typography from "@mui/joy/Typography";
+import Avatar from "@mui/joy/Avatar";
+import Stack from "@mui/joy/Stack";
 import useFetch from "./useFetch";
-import type { Issue, IssueUser } from "../types/types";
+import type { Issue, IssueUser, User } from "../types/types";
 import type { Dispatch } from "react";
 
 type SidebarProps = {
   setSelectedIssue: Dispatch<Issue["number"] | null>;
   issueUsers: IssueUser[];
-  hiddenUsers: IssueUser["login"][];
-  toggleUser: (user: IssueUser["login"]) => void;
+  hiddenUsers: User["login"][];
+  toggleUser: (user: User["login"]) => void;
 };
 
 export default function Sidebar({ setSelectedIssue, issueUsers, hiddenUsers, toggleUser }: SidebarProps) {
@@ -48,38 +50,43 @@ export default function Sidebar({ setSelectedIssue, issueUsers, hiddenUsers, tog
 
       {issueUsers.length > 0 && (
         <>
-          <Typography fontWeight="lg" fontSize="lg" component="h2">
+          <Typography
+            fontWeight="lg"
+            fontSize="xs"
+            component="h2"
+            textTransform="uppercase"
+            sx={{ letterSpacing: 0.3 }}
+          >
             Issue users
           </Typography>
-          {issueUsers.map((user) => (
+          {issueUsers.map((issueUser) => (
             <Checkbox
-              key={user.login}
+              key={issueUser.user.login}
               variant="soft"
               size="sm"
               sx={{
                 flexDirection: "row-reverse",
                 alignItems: "center",
+                marginTop: 0.1,
               }}
-              checked={!hiddenUsers.includes(user.login)}
-              onChange={() => toggleUser(user.login)}
+              checked={!hiddenUsers.includes(issueUser.user.login)}
+              onChange={() => toggleUser(issueUser.user.login)}
               label={
-                <Typography
-                  component="span"
-                  endDecorator={
-                    <Chip
-                      variant="outlined"
-                      size="sm"
-                      color="neutral"
-                      sx={{
-                        borderRadius: "sm",
-                      }}
-                    >
-                      {user.commentsCount}
-                    </Chip>
-                  }
-                >
-                  {user.login}
-                </Typography>
+                <Stack direction="row" alignItems="center">
+                  <Avatar size="sm" variant="solid" src={issueUser.user.avatar_url} sx={{ marginRight: 1 }} />
+                  {issueUser.user.login}
+                  <Chip
+                    variant="outlined"
+                    size="sm"
+                    color="neutral"
+                    sx={{
+                      borderRadius: "sm",
+                      marginLeft: "auto",
+                    }}
+                  >
+                    {issueUser.commentsCount}
+                  </Chip>
+                </Stack>
               }
             />
           ))}

@@ -4,7 +4,7 @@ import { CssVarsProvider } from "@mui/joy/styles";
 import MessagesPane from "./MessagesPane";
 import Sidebar from "./Sidebar";
 import { useEffect, useMemo, useState } from "react";
-import type { Issue, Comment, IssueUser } from "../types/types";
+import type { Issue, Comment, IssueUser, User } from "../types/types";
 import useFetch from "./useFetch";
 
 function App() {
@@ -15,9 +15,9 @@ function App() {
   );
   const comments = useFetch<Comment[]>({ url: issue.data?.comments_url }, { enabled: issue.isFetched });
 
-  const [hiddenUsers, setHiddenUsers] = useState<IssueUser["login"][]>([]);
+  const [hiddenUsers, setHiddenUsers] = useState<User["login"][]>([]);
 
-  function toggleUser(user: IssueUser["login"]) {
+  function toggleUser(user: User["login"]) {
     setHiddenUsers((hiddenUsers) => {
       if (hiddenUsers.includes(user)) return hiddenUsers.filter((currentUser) => currentUser !== user);
       return [...hiddenUsers, user];
@@ -33,7 +33,7 @@ function App() {
     const users: IssueUser[] = [];
 
     comments.data.forEach((comment) => {
-      const userIndex = users.findIndex((user) => user.login === comment.user.login);
+      const userIndex = users.findIndex((user) => user.user.login === comment.user.login);
 
       // If user is already in table, increment count
       if (userIndex > -1) {
@@ -42,7 +42,7 @@ function App() {
 
       // Otherwise create it
       users.push({
-        login: comment.user.login,
+        user: comment.user,
         commentsCount: 1,
       });
     });

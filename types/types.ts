@@ -23,6 +23,6 @@ export type Comment = {
 };
 
 export type IssueUser = {
-  login: Comment["user"]["login"];
+  user: User;
   commentsCount: number;
 };
