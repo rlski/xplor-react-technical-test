@@ -21,3 +21,8 @@ export type Comment = {
 
   body: string;
 };
+
+export type IssueUser = {
+  login: Comment["user"]["login"];
+  commentsCount: number;
+};

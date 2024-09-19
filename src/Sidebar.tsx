@@ -1,15 +1,18 @@
 import Sheet from "@mui/joy/Sheet";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
+import Chip from "@mui/joy/Chip";
 import useFetch from "./useFetch";
-import type { Issue } from "../types/types";
+import type { Issue, IssueUser } from "../types/types";
 import { Dispatch } from "react";
+import { Typography } from "@mui/joy";
 
 type SidebarProps = {
   setSelectedIssue: Dispatch<Issue["number"] | null>;
+  issueUsers: IssueUser[];
 };
 
-export default function Sidebar({ setSelectedIssue }: SidebarProps) {
+export default function Sidebar({ setSelectedIssue, issueUsers }: SidebarProps) {
   const issues = useFetch<Issue[]>({ url: "https://api.github.com/repos/facebook/react/issues?per_page=50" });
 
   return (
@@ -39,6 +42,34 @@ export default function Sidebar({ setSelectedIssue }: SidebarProps) {
           </Option>
         ))}
       </Select>
+
+      {issueUsers.length > 0 && (
+        <>
+          <Typography fontWeight="lg" fontSize="lg" component="h2">
+            Issue users
+          </Typography>
+          {issueUsers.map((user) => (
+            <Typography
+              key={user.login}
+              component="span"
+              endDecorator={
+                <Chip
+                  variant="outlined"
+                  size="sm"
+                  color="neutral"
+                  sx={{
+                    borderRadius: "sm",
+                  }}
+                >
+                  {user.commentsCount}
+                </Chip>
+              }
+            >
+              {user.login}
+            </Typography>
+          ))}
+        </>
+      )}
     </Sheet>
   );
 }
